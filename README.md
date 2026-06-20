@@ -1,18 +1,45 @@
-# One-Hot Encoding & ColumnTransformer in scikit-learn
+# Categorical Encoding with scikit-learn
 
-A hands-on notebook covering categorical feature encoding for machine learning, using a used-car listings dataset as the running example.
+[![Python](https://img.shields.io/badge/Python-3.x-blue.svg)](https://www.python.org/)
+[![scikit-learn](https://img.shields.io/badge/scikit--learn-ML-orange.svg)](https://scikit-learn.org/)
+[![Jupyter](https://img.shields.io/badge/Made%20with-Jupyter-F37626.svg)](https://jupyter.org/)
+
+A hands-on notebook on encoding categorical features for machine learning, using a used-car listings dataset as the running example. Built while learning how `pandas` and `scikit-learn` approach the same problem differently, and why that difference matters once you bring a train/test split into the picture.
+
+## Table of contents
+
+- [What's covered](#whats-covered)
+- [Dataset](#dataset)
+- [Project structure](#project-structure)
+- [Requirements](#requirements)
+- [Usage](#usage)
+- [Key takeaways](#key-takeaways)
+- [Notes](#notes)
 
 ## What's covered
 
-- One-hot encoding with `pandas.get_dummies`
-- The k-1 dummy variable trick (`drop_first=True`) and why it avoids multicollinearity
-- One-hot encoding with scikit-learn's `OneHotEncoder`, including the correct `fit` (train) / `transform` (test) split to avoid data leakage
-- Handling high-cardinality categorical columns by grouping rare categories into an "uncommon" bucket
-- Combining everything into a single, pipeline-friendly step with `ColumnTransformer`
+| Topic | Why it matters |
+|---|---|
+| One-hot encoding with `pandas.get_dummies` | Fast for exploration, but no `fit`/`transform` split |
+| k-1 encoding (`drop_first=True`) | Avoids multicollinearity between dummy columns for linear models |
+| `sklearn.preprocessing.OneHotEncoder` | Learns categories from training data only, then applies the same encoding to test data — no data leakage |
+| Grouping rare categories | Prevents high-cardinality columns (like `brand`) from exploding into hundreds of sparse columns |
+| `sklearn.compose.ColumnTransformer` | Applies different transformations to different columns in a single, pipeline-ready step |
 
 ## Dataset
 
-This notebook expects a `cars.csv` file in the same directory, containing used car listings with columns including `brand`, `km_driven`, `fuel`, `owner`, and a target column such as `selling_price`. Add your own copy of the dataset before running, or update the loading cell to point to your data source. (If you found this dataset on Kaggle or elsewhere, consider linking the original source here instead of redistributing the file, depending on its license.)
+This notebook expects a `cars.csv` file in the same directory, containing used car listings with columns including `brand`, `km_driven`, `fuel`, `owner`, and a target column such as `selling_price`.
+
+Add your own copy of the dataset before running, or update the loading cell to point to your data source. If you sourced this dataset from Kaggle or elsewhere, consider linking the original source here instead of redistributing the file, depending on its license.
+
+## Project structure
+
+```
+.
+├── onehot-encoding-and-columntransformer.ipynb   # main notebook
+├── cars.csv                                      # dataset (add your own)
+└── README.md
+```
 
 ## Requirements
 
@@ -20,18 +47,31 @@ This notebook expects a `cars.csv` file in the same directory, containing used c
 pandas
 numpy
 scikit-learn
+jupyter
 ```
 
 Install with:
 
-```
-pip install pandas numpy scikit-learn
+```bash
+pip install pandas numpy scikit-learn jupyter
 ```
 
 ## Usage
 
-Open `onehot-encoding-and-columntransformer.ipynb` in Jupyter or VS Code and run the cells top to bottom.
+```bash
+jupyter notebook onehot-encoding-and-columntransformer.ipynb
+```
+
+Run the cells top to bottom. Each section is preceded by a short explanation of what's being done and why.
+
+## Key takeaways
+
+- `pd.get_dummies` is quick for exploration but can't guarantee train and test sets get encoded consistently.
+- `OneHotEncoder` fixes that: fit on train, transform on train and test.
+- Use `drop='first'` (k-1 encoding) to avoid multicollinearity for linear models.
+- For high-cardinality columns, group rare categories together before encoding.
+- `ColumnTransformer` bundles multiple column-specific transformations into one pipeline-friendly object instead of manual array stitching.
 
 ## Notes
 
-This was a learning exercise — feedback and suggestions are welcome.
+This started as a personal learning exercise, so feedback, corrections, and suggestions are very welcome — feel free to open an issue or a pull request.
